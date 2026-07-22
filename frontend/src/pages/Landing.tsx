@@ -79,7 +79,7 @@ const steps = [
   {
     number: '02',
     title: 'AI Analyses Everything',
-    desc: 'Gemini AI cross-references your profile against dozens of hiring signals and industry best practices.',
+    desc: 'Groq AI cross-references your profile against dozens of hiring signals and industry best practices.',
   },
   {
     number: '03',
@@ -330,7 +330,7 @@ export default function Landing() {
             <span className="text-sm text-slate-400 font-semibold">DevInsight</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-slate-600">
-            <Shield size={11} /> Built with FastAPI · React · Gemini AI
+            <Shield size={11} /> Built with FastAPI · React · Groq AI
           </div>
           <p className="text-sm text-slate-600">© 2026 DevInsight. Free to use.</p>
         </div>
