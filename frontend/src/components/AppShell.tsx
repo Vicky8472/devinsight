@@ -25,7 +25,7 @@ export default function AppShell({ children }: Props) {
               <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
                 <Zap size={14} className="text-white" />
               </div>
-              <span className="font-bold text-white text-base">DevScope</span>
+              <span className="font-bold text-white text-base">DevInsight</span>
             </Link>
             <Link
               to="/dashboard"
@@ -37,9 +37,6 @@ export default function AppShell({ children }: Props) {
           </div>
 
           <div className="flex items-center gap-4">
-            {user && (
-              <span className="text-slate-500 text-xs hidden sm:block">{user.email}</span>
-            )}
             <button
               onClick={handleSignOut}
               className="flex items-center gap-1.5 text-slate-400 hover:text-white text-sm transition-colors"

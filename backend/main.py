@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -8,9 +9,14 @@ from database import init_db
 
 app = FastAPI(title="AI Career Analyzer API", version="1.0.0")
 
+_origins = ["http://localhost:5173", "http://localhost:4173"]
+_frontend = os.getenv("FRONTEND_URL", "")
+if _frontend:
+    _origins.append(_frontend)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:4173"],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

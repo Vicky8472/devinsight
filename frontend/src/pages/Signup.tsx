@@ -44,10 +44,10 @@ export default function Signup() {
             <div className="w-9 h-9 rounded-xl bg-violet-600 flex items-center justify-center">
               <Zap size={18} className="text-white" />
             </div>
-            <span className="font-bold text-white text-xl">DevScope</span>
+            <span className="font-bold text-white text-xl">DevInsight</span>
           </Link>
           <h1 className="text-2xl font-bold text-white mb-1">Create account</h1>
-          <p className="text-slate-400 text-sm">Get started with DevScope</p>
+          <p className="text-slate-400 text-sm">Get started with DevInsight</p>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">

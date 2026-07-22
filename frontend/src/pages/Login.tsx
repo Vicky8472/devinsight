@@ -46,7 +46,7 @@ export default function Login() {
             <div className="w-9 h-9 rounded-xl bg-violet-600 flex items-center justify-center">
               <Zap size={18} className="text-white" />
             </div>
-            <span className="font-bold text-white text-xl">DevScope</span>
+            <span className="font-bold text-white text-xl">DevInsight</span>
           </Link>
           <h1 className="text-2xl font-bold text-white mb-1">Welcome back</h1>
           <p className="text-slate-400 text-sm">Sign in to your account</p>

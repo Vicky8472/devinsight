@@ -145,12 +145,6 @@ export default function Landing() {
                 >
                   Start Analyzing Free <ArrowRight size={16} />
                 </Link>
-                <a
-                  href="#how-it-works"
-                  className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-6 py-3 rounded-xl transition-colors border border-slate-700"
-                >
-                  See how it works
-                </a>
               </motion.div>
 
               <motion.div
@@ -176,7 +170,10 @@ export default function Landing() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="w-full max-w-sm flex-shrink-0"
             >
-              <div className="bg-slate-900 border border-slate-700/60 rounded-2xl p-6 shadow-2xl shadow-black/40">
+              <div className="bg-slate-900 border border-slate-700/60 rounded-2xl p-6 shadow-2xl shadow-black/40 relative">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  Sample Result
+                </div>
                 <div className="flex items-start justify-between mb-6">
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Career Score</p>
@@ -330,12 +327,12 @@ export default function Landing() {
             <div className="w-6 h-6 rounded bg-violet-600 flex items-center justify-center">
               <Zap size={12} className="text-white" />
             </div>
-            <span className="text-sm text-slate-400 font-semibold">DevScope</span>
+            <span className="text-sm text-slate-400 font-semibold">DevInsight</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-slate-600">
             <Shield size={11} /> Built with FastAPI · React · Gemini AI
           </div>
-          <p className="text-sm text-slate-600">© 2026 DevScope. Free to use.</p>
+          <p className="text-sm text-slate-600">© 2026 DevInsight. Free to use.</p>
         </div>
       </footer>
     </div>
