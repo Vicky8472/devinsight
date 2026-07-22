@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function AppShell({ children }: Props) {
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
