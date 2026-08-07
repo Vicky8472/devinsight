@@ -10,7 +10,7 @@ from database import init_db
 app = FastAPI(title="AI Career Analyzer API", version="1.0.0")
 
 _origins = ["http://localhost:5173", "http://localhost:4173"]
-_frontend = os.getenv("FRONTEND_URL", "")
+_frontend = os.getenv("FRONTEND_URL", "").strip()
 if _frontend:
     _origins.append(_frontend)
 
@@ -39,8 +39,3 @@ def startup():
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
-
-@app.get("/debug-cors")
-def debug_cors():
-    return {"frontend_url_repr": repr(_frontend), "origins": _origins}
