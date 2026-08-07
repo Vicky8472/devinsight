@@ -19,7 +19,7 @@ export default function AppShell({ children }: Props) {
     <div className="min-h-screen bg-slate-950 text-white">
       {/* Top bar */}
       <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="max-w-[1800px] mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
@@ -48,7 +48,7 @@ export default function AppShell({ children }: Props) {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-10">{children}</main>
+      <main className="max-w-[1800px] mx-auto px-6 lg:px-10 py-10">{children}</main>
     </div>
   );
 }

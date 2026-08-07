@@ -65,40 +65,43 @@ export default function ResumeAnalyzer() {
     }
   };
 
+  const isIdle = status === 'idle' && !file;
+
   return (
     <AppShell>
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <FileText size={20} className="text-blue-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">Resume Analyzer</h1>
-            <p className="text-slate-400 text-sm">AI-powered ATS scoring, keyword gaps, and rewrite suggestions</p>
+      <div className={isIdle ? 'max-w-5xl mx-auto min-h-[calc(100vh-14rem)] flex flex-col justify-center pt-16' : 'max-w-5xl mx-auto'}>
+        {/* Header */}
+        <div className={isIdle ? 'mb-10 text-center' : 'mb-8 text-center'}>
+          <div className={isIdle ? 'flex flex-col items-center gap-4 mb-2' : 'flex flex-col items-center gap-3 mb-2'}>
+            <div className={isIdle ? 'w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center' : 'w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center'}>
+              <FileText size={isIdle ? 26 : 20} className="text-blue-400" />
+            </div>
+            <div>
+              <h1 className={isIdle ? 'text-3xl font-bold text-white' : 'text-2xl font-bold text-white'}>Resume Analyzer</h1>
+              <p className={isIdle ? 'text-slate-400 text-base mt-1' : 'text-slate-400 text-sm'}>AI-powered ATS scoring, keyword gaps, and rewrite suggestions</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Upload */}
-      <div className="max-w-xl mb-8">
-        <UploadZone
-          onFile={setFile}
-          file={file}
-          onClear={() => { setFile(null); setResult(null); setStatus('idle'); }}
-          disabled={status === 'loading'}
-        />
-        {file && status !== 'loading' && status !== 'success' && (
-          <motion.button
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            onClick={handleAnalyse}
-            className="mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-          >
-            Analyse Resume <ArrowRight size={16} />
-          </motion.button>
-        )}
-      </div>
+        {/* Upload */}
+        <div className="max-w-xl mb-8 mx-auto w-full">
+          <UploadZone
+            onFile={setFile}
+            file={file}
+            onClear={() => { setFile(null); setResult(null); setStatus('idle'); }}
+            disabled={status === 'loading'}
+          />
+          {file && status !== 'loading' && status !== 'success' && (
+            <motion.button
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              onClick={handleAnalyse}
+              className="mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+            >
+              Analyse Resume <ArrowRight size={16} />
+            </motion.button>
+          )}
+        </div>
 
       <AnimatePresence>
         {/* Loading */}
@@ -108,7 +111,7 @@ export default function ResumeAnalyzer() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md"
+            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 border-2 border-slate-700 border-t-violet-500 rounded-full animate-spin" />
@@ -142,7 +145,7 @@ export default function ResumeAnalyzer() {
             key="error"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400 max-w-lg"
+            className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400 max-w-lg mx-auto"
           >
             <AlertCircle size={16} className="flex-shrink-0" />
             {error}
@@ -287,6 +290,7 @@ export default function ResumeAnalyzer() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </AppShell>
   );
 }

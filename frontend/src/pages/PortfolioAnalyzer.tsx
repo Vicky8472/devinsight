@@ -92,46 +92,53 @@ export default function PortfolioAnalyzer() {
     if (e.key === 'Enter') handleAnalyse();
   };
 
+  const isIdle = status === 'idle';
+
   return (
     <AppShell>
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-            <Globe size={20} className="text-emerald-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">Portfolio Analyzer</h1>
-            <p className="text-slate-400 text-sm">AI-powered UX, accessibility, SEO and content review</p>
+      <div className={isIdle ? 'max-w-5xl mx-auto min-h-[calc(100vh-14rem)] flex flex-col justify-center pt-16' : 'max-w-5xl mx-auto'}>
+        {/* Header */}
+        <div className={isIdle ? 'mb-10 text-center' : 'mb-8 text-center'}>
+          <div className={isIdle ? 'flex flex-col items-center gap-4 mb-2' : 'flex flex-col items-center gap-3 mb-2'}>
+            <div className={isIdle ? 'w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center' : 'w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center'}>
+              <Globe size={isIdle ? 26 : 20} className="text-emerald-400" />
+            </div>
+            <div>
+              <h1 className={isIdle ? 'text-3xl font-bold text-white' : 'text-2xl font-bold text-white'}>Portfolio Analyzer</h1>
+              <p className={isIdle ? 'text-slate-400 text-base mt-1' : 'text-slate-400 text-sm'}>AI-powered UX, accessibility, SEO and content review</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* URL input */}
-      <div className="max-w-xl mb-8">
-        <div className="flex gap-3">
-          <div className="relative flex-1">
-            <Globe size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
-            <input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="https://yourportfolio.com"
-              disabled={status === 'loading'}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors text-sm disabled:opacity-50"
-            />
+        {/* URL input */}
+        <div className={isIdle ? 'max-w-xl mb-8 mx-auto w-full' : 'max-w-xl mb-8 mx-auto w-full'}>
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <Globe size={isIdle ? 18 : 16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+              <input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="https://yourportfolio.com"
+                disabled={status === 'loading'}
+                className={isIdle
+                  ? 'w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors text-base disabled:opacity-50'
+                  : 'w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors text-sm disabled:opacity-50'}
+              />
+            </div>
+            <button
+              onClick={handleAnalyse}
+              disabled={!url.trim() || status === 'loading'}
+              className={isIdle
+                ? 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-6 py-4 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-base'
+                : 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-sm'}
+            >
+              Analyse <ArrowRight size={isIdle ? 17 : 15} />
+            </button>
           </div>
-          <button
-            onClick={handleAnalyse}
-            disabled={!url.trim() || status === 'loading'}
-            className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-sm"
-          >
-            Analyse <ArrowRight size={15} />
-          </button>
+          <p className="text-xs text-slate-600 mt-2 pl-1">Works with any public website — portfolio, personal site, or project page</p>
         </div>
-        <p className="text-xs text-slate-600 mt-2 pl-1">Works with any public website — portfolio, personal site, or project page</p>
-      </div>
 
       <AnimatePresence>
         {/* Loading */}
@@ -141,7 +148,7 @@ export default function PortfolioAnalyzer() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md"
+            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 border-2 border-slate-700 border-t-emerald-500 rounded-full animate-spin" />
@@ -175,7 +182,7 @@ export default function PortfolioAnalyzer() {
             key="error"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400 max-w-lg"
+            className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400 max-w-lg mx-auto"
           >
             <AlertCircle size={16} className="flex-shrink-0" />
             {error}
@@ -343,6 +350,7 @@ export default function PortfolioAnalyzer() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </AppShell>
   );
 }

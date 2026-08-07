@@ -106,8 +106,8 @@ export default function Landing() {
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-violet-600/15 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-6xl mx-auto relative">
-          <div className="flex flex-col lg:flex-row items-center gap-16">
+        <div className="max-w-6xl xl:max-w-[1800px] mx-auto relative">
+          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
 
             {/* Left: copy */}
             <div className="flex-1 text-center lg:text-left">
@@ -224,7 +224,7 @@ export default function Landing() {
 
       {/* ── Features ── */}
       <section id="features" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl xl:max-w-[1800px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6 }}
@@ -265,7 +265,7 @@ export default function Landing() {
 
       {/* ── How it works ── */}
       <section id="how-it-works" className="py-24 px-6 bg-slate-900/40">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl xl:max-w-[1800px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6 }}
@@ -322,7 +322,7 @@ export default function Landing() {
 
       {/* ── Footer ── */}
       <footer className="border-t border-slate-800 py-8 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-6xl xl:max-w-[1800px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded bg-violet-600 flex items-center justify-center">
               <Zap size={12} className="text-white" />

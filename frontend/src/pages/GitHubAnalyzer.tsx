@@ -82,44 +82,51 @@ export default function GitHubAnalyzer() {
 
   const totalLangs = Object.values(result?.languages ?? {}).reduce((a, b) => a + b, 0);
 
+  const isIdle = status === 'idle';
+
   return (
     <AppShell>
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-            <GitBranch size={20} className="text-violet-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">GitHub Analyzer</h1>
-            <p className="text-slate-400 text-sm">AI-powered review of your GitHub profile and repositories</p>
+      <div className={isIdle ? 'max-w-5xl mx-auto min-h-[calc(100vh-14rem)] flex flex-col justify-center pt-16' : 'max-w-5xl mx-auto'}>
+        {/* Header */}
+        <div className={isIdle ? 'mb-10 text-center' : 'mb-8 text-center'}>
+          <div className={isIdle ? 'flex flex-col items-center gap-4 mb-2' : 'flex flex-col items-center gap-3 mb-2'}>
+            <div className={isIdle ? 'w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center' : 'w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center'}>
+              <GitBranch size={isIdle ? 26 : 20} className="text-violet-400" />
+            </div>
+            <div>
+              <h1 className={isIdle ? 'text-3xl font-bold text-white' : 'text-2xl font-bold text-white'}>GitHub Analyzer</h1>
+              <p className={isIdle ? 'text-slate-400 text-base mt-1' : 'text-slate-400 text-sm'}>AI-powered review of your GitHub profile and repositories</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Input */}
-      <form onSubmit={handleSubmit} className="mb-10">
-        <div className="flex gap-3 max-w-lg">
-          <div className="relative flex-1">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter GitHub username"
-              disabled={status === 'loading'}
-              className="w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors disabled:opacity-50"
-            />
+        {/* Input */}
+        <form onSubmit={handleSubmit} className={isIdle ? 'mb-10 flex justify-center' : 'mb-10 flex justify-center'}>
+          <div className={isIdle ? 'flex gap-3 max-w-xl w-full' : 'flex gap-3 max-w-lg w-full'}>
+            <div className="relative flex-1">
+              <Search size={isIdle ? 17 : 15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter GitHub username"
+                disabled={status === 'loading'}
+                className={isIdle
+                  ? 'w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 rounded-xl py-4 pl-11 pr-4 text-base focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors disabled:opacity-50'
+                  : 'w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors disabled:opacity-50'}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={status === 'loading' || !username.trim()}
+              className={isIdle
+                ? 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-6 py-4 rounded-xl transition-colors text-base whitespace-nowrap'
+                : 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm whitespace-nowrap'}
+            >
+              {status === 'loading' ? 'Analysing…' : 'Analyse Profile'}
+            </button>
           </div>
-          <button
-            type="submit"
-            disabled={status === 'loading' || !username.trim()}
-            className="bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
-          >
-            {status === 'loading' ? 'Analysing…' : 'Analyse Profile'}
-          </button>
-        </div>
-      </form>
+        </form>
 
       {/* Loading */}
       <AnimatePresence>
@@ -129,7 +136,7 @@ export default function GitHubAnalyzer() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md"
+            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 border-2 border-slate-700 border-t-violet-500 rounded-full animate-spin" />
@@ -165,7 +172,7 @@ export default function GitHubAnalyzer() {
             key="error"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400 max-w-lg"
+            className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400 max-w-lg mx-auto"
           >
             <AlertCircle size={16} className="flex-shrink-0" />
             {error}
@@ -342,6 +349,7 @@ export default function GitHubAnalyzer() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </AppShell>
   );
 }
