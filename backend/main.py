@@ -39,3 +39,8 @@ def startup():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/debug-cors")
+def debug_cors():
+    return {"frontend_url_repr": repr(_frontend), "origins": _origins}
