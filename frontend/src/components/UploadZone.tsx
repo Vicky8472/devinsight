@@ -60,17 +60,17 @@ export default function UploadZone({ onFile, accept = '.pdf,.docx', disabled, fi
       onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
-      className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all ${
+      className={`border-2 border-dashed rounded-xl p-14 text-center cursor-pointer transition-all ${
         dragging
           ? 'border-violet-500 bg-violet-500/10'
           : 'border-slate-700 hover:border-slate-500 bg-slate-900/50 hover:bg-slate-900'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
-      <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto mb-4">
-        <Upload size={22} className="text-slate-400" />
+      <div className="w-14 h-14 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto mb-5">
+        <Upload size={26} className="text-slate-400" />
       </div>
-      <p className="text-white font-medium mb-1">Drop your resume here</p>
-      <p className="text-slate-500 text-sm mb-3">or click to browse</p>
+      <p className="text-white font-medium text-base mb-1.5">Drop your resume here</p>
+      <p className="text-slate-500 text-sm mb-4">or click to browse</p>
       <span className="text-xs text-slate-600 bg-slate-800 px-3 py-1 rounded-full">PDF or DOCX</span>
       <input
         ref={inputRef}

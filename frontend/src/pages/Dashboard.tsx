@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   FileText, GitBranch, Globe, ArrowRight, CheckCircle, Clock,
@@ -12,10 +12,13 @@ import {
 } from 'recharts';
 import AppShell from '../components/AppShell';
 import ScoreRing from '../components/ScoreRing';
+import { useAuth } from '../context/AuthContext';
 import {
   loadGitHub, loadResume, loadPortfolio, timeAgo,
   type StoredGitHub, type StoredResume, type StoredPortfolio,
 } from '../utils/analysisStore';
+
+const PENDING_DOWNLOAD_KEY = 'ds_pending_download';
 
 function scoreColor(s: number) {
   if (s >= 75) return '#34d399';
@@ -139,12 +142,19 @@ const TooltipContent = ({ active, payload }: { active?: boolean; payload?: { val
 };
 
 export default function Dashboard() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const github = loadGitHub();
   const resume = loadResume();
   const portfolio = loadPortfolio();
   const [downloading, setDownloading] = useState(false);
 
   const handleDownload = async () => {
+    if (!user) {
+      sessionStorage.setItem(PENDING_DOWNLOAD_KEY, '1');
+      navigate('/signup');
+      return;
+    }
     setDownloading(true);
     try {
       const blob = await api.downloadReport({ github, resume, portfolio });
@@ -243,7 +253,7 @@ export default function Dashboard() {
           <h3 className="text-sm font-medium text-slate-400 mb-3 flex items-center gap-2">
             <Target size={14} /> Analyzers
           </h3>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-3 gap-5">
             {MODULES.map((m, i) => {
               const stored = scores[m.key];
               const isDone = !!stored;
@@ -254,10 +264,11 @@ export default function Dashboard() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08 }}
+                  className="h-full"
                 >
                   <Link
                     to={m.to}
-                    className="block bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl p-5 transition-colors group relative overflow-hidden"
+                    className="flex flex-col h-full min-h-[228px] bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl p-6 transition-colors group relative overflow-hidden"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className={`w-9 h-9 rounded-xl border ${m.bg} flex items-center justify-center`}>
@@ -279,21 +290,33 @@ export default function Dashboard() {
                     </h2>
                     <p className="text-slate-500 text-xs leading-relaxed mb-3">{m.description}</p>
 
-                    {isDone && stored ? (
-                      <div className="flex items-center justify-between">
-                        <span className="text-2xl font-black" style={{ color: scoreColor(stored.overallScore) }}>
-                          {stored.overallScore}
-                          <span className="text-slate-600 text-sm font-normal">/100</span>
-                        </span>
-                        <span className="flex items-center gap-1 text-xs text-slate-500">
-                          <Clock size={10} /> {timeAgo(stored.savedAt)}
-                        </span>
+                    <div className="mt-auto flex items-end justify-between gap-3">
+                      <div>
+                        {isDone && stored ? (
+                          <>
+                            <span className="text-2xl font-black" style={{ color: scoreColor(stored.overallScore) }}>
+                              {stored.overallScore}
+                              <span className="text-slate-600 text-sm font-normal">/100</span>
+                            </span>
+                            <span className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                              <Clock size={10} /> {timeAgo(stored.savedAt)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-xs text-slate-600">Not started</span>
+                        )}
                       </div>
-                    ) : (
-                      <div className="flex items-center gap-1 text-xs text-violet-400">
-                        Run analysis <ArrowRight size={12} />
-                      </div>
-                    )}
+
+                      {isDone ? (
+                        <span className="flex items-center gap-1 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1.5 whitespace-nowrap group-hover:bg-emerald-500/20 transition-colors">
+                          View Results <ArrowRight size={11} />
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1 text-xs font-medium text-slate-300 bg-slate-800 border border-slate-700 rounded-full px-3 py-1.5 whitespace-nowrap group-hover:bg-violet-500/20 group-hover:border-violet-500/30 group-hover:text-violet-300 transition-colors">
+                          Run Analysis <ArrowRight size={11} />
+                        </span>
+                      )}
+                    </div>
                   </Link>
                 </motion.div>
               );

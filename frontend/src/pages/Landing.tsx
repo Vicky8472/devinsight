@@ -2,9 +2,10 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   FileText, GitBranch, Globe, ArrowRight, CheckCircle,
-  Zap, Star, BarChart3, Shield,
+  Zap, BarChart3, Shield,
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import HeroIcons from '../components/HeroIcons';
 
 function ScoreRing({ score, color, label }: { score: number; color: string; label: string }) {
   const size = 80;
@@ -78,8 +79,8 @@ const steps = [
   },
   {
     number: '02',
-    title: 'AI Analyses Everything',
-    desc: 'Groq AI cross-references your profile against dozens of hiring signals and industry best practices.',
+    title: 'AI Evaluates Your Developer Profile',
+    desc: 'AI analyzes your profile against hiring signals and industry best practices.',
   },
   {
     number: '03',
@@ -101,13 +102,17 @@ export default function Landing() {
       <Navbar />
 
       {/* ── Hero ── */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-violet-600/15 rounded-full blur-3xl" />
-        </div>
+      <section className="relative min-h-[92vh] flex flex-col justify-center pt-32 pb-24 px-6 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(115deg, #0b1330 0%, #1e2a5e 22%, #4c2a7a 45%, #7a2f6b 62%, #9c2d4a 78%, #7a1f2e 100%)',
+          }}
+        />
+        <HeroIcons />
 
         <div className="max-w-6xl xl:max-w-[1800px] mx-auto relative">
-          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+          <div className="max-w-6xl xl:max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 xl:gap-24">
 
             {/* Left: copy */}
             <div className="flex-1 text-center lg:text-left">
@@ -115,12 +120,12 @@ export default function Landing() {
                 variants={fadeUp} initial="hidden" animate="visible" custom={0}
                 className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/30 rounded-full px-4 py-1.5 text-sm text-violet-300 mb-6"
               >
-                <Zap size={13} /> AI-Powered Career Analysis
+                <Zap size={13} /> AI-Powered Resume • GitHub • Portfolio Analysis
               </motion.div>
 
               <motion.h1
                 variants={fadeUp} initial="hidden" animate="visible" custom={1}
-                className="text-5xl lg:text-6xl font-bold leading-tight text-white mb-6"
+                className="text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white mb-6"
               >
                 Elevate Your{' '}
                 <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
@@ -130,7 +135,7 @@ export default function Landing() {
 
               <motion.p
                 variants={fadeUp} initial="hidden" animate="visible" custom={2}
-                className="text-slate-400 text-lg mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed"
+                className="text-slate-300 text-lg xl:text-xl mb-8 max-w-lg xl:max-w-xl mx-auto lg:mx-0 leading-relaxed"
               >
                 Get AI-powered insights on your resume, GitHub, and portfolio. Know exactly what to fix and land your next role faster.
               </motion.p>
@@ -140,27 +145,13 @@ export default function Landing() {
                 className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
               >
                 <Link
-                  to="/signup"
-                  className="flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+                  to="/dashboard"
+                  className="flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 xl:px-8 py-3 xl:py-4 rounded-xl transition-colors text-base xl:text-lg"
                 >
-                  Start Analyzing Free <ArrowRight size={16} />
+                  Start Free Analysis <ArrowRight size={16} />
                 </Link>
               </motion.div>
 
-              <motion.div
-                variants={fadeUp} initial="hidden" animate="visible" custom={4}
-                className="flex flex-wrap items-center gap-4 mt-8 justify-center lg:justify-start text-sm text-slate-500"
-              >
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle size={13} className="text-emerald-500" /> No credit card
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle size={13} className="text-emerald-500" /> Free forever
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle size={13} className="text-emerald-500" /> Instant results
-                </span>
-              </motion.div>
             </div>
 
             {/* Right: mock dashboard card */}
@@ -236,13 +227,14 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-10 max-w-[88%] xl:max-w-[85%] mx-auto">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
                 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors group"
+                whileHover={{ y: -4 }}
+                className="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-violet-500/40 hover:shadow-[0_0_20px_-8px_rgba(139,92,246,0.35)] transition-all duration-300 group"
               >
                 <div className={`w-11 h-11 rounded-xl border ${f.iconBg} flex items-center justify-center mb-4`}>
                   <f.icon size={21} className={f.color} />
@@ -275,7 +267,7 @@ export default function Landing() {
             <p className="text-slate-400 text-lg">No setup. No configuration. Just paste and go.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {steps.map((step, i) => (
               <motion.div
                 key={step.number}
@@ -283,7 +275,7 @@ export default function Landing() {
                 viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}
                 className="text-center"
               >
-                <div className="text-6xl font-black text-violet-500/25 mb-4 leading-none">
+                <div className="text-[3.3rem] font-black text-violet-500/45 mb-4 leading-none">
                   {step.number}
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">{step.title}</h3>
@@ -301,17 +293,15 @@ export default function Landing() {
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6 }}
           >
-            <div className="flex items-center justify-center gap-0.5 text-yellow-400 mb-5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={18} fill="currentColor" />
-              ))}
+            <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/30 rounded-full px-4 py-1.5 text-sm text-violet-300 mb-5">
+              <Zap size={13} /> AI-Powered Resume • GitHub • Portfolio Analysis
             </div>
             <h2 className="text-4xl font-bold text-white mb-4">
               Start improving your profile today
             </h2>
-            <p className="text-slate-400 text-lg mb-8">Free forever. No credit card required.</p>
+            <p className="text-slate-400 text-lg mb-8">Analyze your developer profile.</p>
             <Link
-              to="/signup"
+              to="/dashboard"
               className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-8 py-4 rounded-xl transition-colors text-lg"
             >
               Analyze My Profile Free <ArrowRight size={18} />

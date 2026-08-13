@@ -3,6 +3,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../services/api';
+import { loadGitHub, loadResume, loadPortfolio } from '../utils/analysisStore';
+
+const PENDING_DOWNLOAD_KEY = 'ds_pending_download';
+
+async function triggerReportDownload() {
+  const github = loadGitHub();
+  const resume = loadResume();
+  const portfolio = loadPortfolio();
+  const blob = await api.downloadReport({ github, resume, portfolio });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'devscope-report.pdf';
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export default function Login() {
   const { signIn } = useAuth();
@@ -22,17 +39,31 @@ export default function Login() {
     setLoading(false);
     if (error) {
       setError(error);
-    } else {
-      navigate('/dashboard');
+      return;
     }
+
+    const hasPendingDownload = sessionStorage.getItem(PENDING_DOWNLOAD_KEY) === '1';
+    sessionStorage.removeItem(PENDING_DOWNLOAD_KEY);
+
+    if (hasPendingDownload) {
+      try {
+        await triggerReportDownload();
+      } catch {
+        // silently fail — user can retry the download from the dashboard
+      }
+    }
+    navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-      {/* Background glow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-violet-600/10 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 relative">
+      {/* Background gradient */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: 'linear-gradient(115deg, #0b1330 0%, #1e2a5e 22%, #4c2a7a 45%, #7a2f6b 62%, #9c2d4a 78%, #7a1f2e 100%)',
+        }}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}

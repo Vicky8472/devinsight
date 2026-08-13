@@ -111,10 +111,10 @@ export default function PortfolioAnalyzer() {
         </div>
 
         {/* URL input */}
-        <div className={isIdle ? 'max-w-xl mb-8 mx-auto w-full' : 'max-w-xl mb-8 mx-auto w-full'}>
+        <div className={isIdle ? 'max-w-2xl mb-8 mx-auto w-full' : 'max-w-xl mb-8 mx-auto w-full'}>
           <div className="flex gap-3">
             <div className="relative flex-1">
-              <Globe size={isIdle ? 18 : 16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+              <Globe size={isIdle ? 19 : 16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               <input
                 type="url"
                 value={url}
@@ -123,7 +123,7 @@ export default function PortfolioAnalyzer() {
                 placeholder="https://yourportfolio.com"
                 disabled={status === 'loading'}
                 className={isIdle
-                  ? 'w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors text-base disabled:opacity-50'
+                  ? 'w-full bg-slate-900 border border-slate-700 rounded-xl pl-12 pr-4 py-[1.15rem] text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors text-[1.05rem] disabled:opacity-50'
                   : 'w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors text-sm disabled:opacity-50'}
               />
             </div>
@@ -131,13 +131,13 @@ export default function PortfolioAnalyzer() {
               onClick={handleAnalyse}
               disabled={!url.trim() || status === 'loading'}
               className={isIdle
-                ? 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-6 py-4 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-base'
+                ? 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-7 py-[1.15rem] rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-[1.05rem] shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/40'
                 : 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-sm'}
             >
-              Analyse <ArrowRight size={isIdle ? 17 : 15} />
+              Analyse <ArrowRight size={isIdle ? 19 : 15} />
             </button>
           </div>
-          <p className="text-xs text-slate-600 mt-2 pl-1">Works with any public website — portfolio, personal site, or project page</p>
+          <p className="text-xs text-slate-500 mt-2 pl-1">Works with any public website — portfolio, personal site, or project page</p>
         </div>
 
       <AnimatePresence>

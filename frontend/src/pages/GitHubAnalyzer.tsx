@@ -101,10 +101,10 @@ export default function GitHubAnalyzer() {
         </div>
 
         {/* Input */}
-        <form onSubmit={handleSubmit} className={isIdle ? 'mb-10 flex justify-center' : 'mb-10 flex justify-center'}>
-          <div className={isIdle ? 'flex gap-3 max-w-xl w-full' : 'flex gap-3 max-w-lg w-full'}>
+        <form onSubmit={handleSubmit} className={isIdle ? 'mb-3 flex justify-center' : 'mb-10 flex justify-center'}>
+          <div className={isIdle ? 'flex gap-3 max-w-2xl w-full' : 'flex gap-3 max-w-lg w-full'}>
             <div className="relative flex-1">
-              <Search size={isIdle ? 17 : 15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search size={isIdle ? 19 : 15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
                 value={username}
@@ -112,7 +112,7 @@ export default function GitHubAnalyzer() {
                 placeholder="Enter GitHub username"
                 disabled={status === 'loading'}
                 className={isIdle
-                  ? 'w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 rounded-xl py-4 pl-11 pr-4 text-base focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors disabled:opacity-50'
+                  ? 'w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 rounded-xl py-[1.15rem] pl-12 pr-4 text-[1.05rem] focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/50 transition-colors disabled:opacity-50'
                   : 'w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors disabled:opacity-50'}
               />
             </div>
@@ -120,13 +120,19 @@ export default function GitHubAnalyzer() {
               type="submit"
               disabled={status === 'loading' || !username.trim()}
               className={isIdle
-                ? 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-6 py-4 rounded-xl transition-colors text-base whitespace-nowrap'
+                ? 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-7 py-[1.15rem] rounded-xl transition-colors text-[1.05rem] whitespace-nowrap'
                 : 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm whitespace-nowrap'}
             >
               {status === 'loading' ? 'Analysing…' : 'Analyse Profile'}
             </button>
           </div>
         </form>
+
+        {isIdle && (
+          <p className="text-xs text-slate-500 text-center mb-7">
+            Repositories, documentation, languages, and profile completeness will be analyzed.
+          </p>
+        )}
 
       {/* Loading */}
       <AnimatePresence>

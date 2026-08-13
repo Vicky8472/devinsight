@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -17,38 +16,10 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/analyze/resume"
-            element={
-              <ProtectedRoute>
-                <ResumeAnalyzer />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/analyze/github"
-            element={
-              <ProtectedRoute>
-                <GitHubAnalyzer />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/analyze/portfolio"
-            element={
-              <ProtectedRoute>
-                <PortfolioAnalyzer />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/analyze/resume" element={<ResumeAnalyzer />} />
+          <Route path="/analyze/github" element={<GitHubAnalyzer />} />
+          <Route path="/analyze/portfolio" element={<PortfolioAnalyzer />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

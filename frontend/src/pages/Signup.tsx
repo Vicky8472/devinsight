@@ -1,8 +1,31 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../services/api';
+import { loadGitHub, loadResume, loadPortfolio } from '../utils/analysisStore';
+
+const PENDING_DOWNLOAD_KEY = 'ds_pending_download';
+
+const benefits = [
+  'Download your PDF report.',
+  'Save your analysis results.',
+  'Access your reports again later.',
+];
+
+async function triggerReportDownload() {
+  const github = loadGitHub();
+  const resume = loadResume();
+  const portfolio = loadPortfolio();
+  const blob = await api.downloadReport({ github, resume, portfolio });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'devscope-report.pdf';
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export default function Signup() {
   const { signUp } = useAuth();
@@ -22,16 +45,30 @@ export default function Signup() {
     setLoading(false);
     if (error) {
       setError(error);
-    } else {
-      navigate('/dashboard');
+      return;
     }
+
+    const hasPendingDownload = sessionStorage.getItem(PENDING_DOWNLOAD_KEY) === '1';
+    sessionStorage.removeItem(PENDING_DOWNLOAD_KEY);
+
+    if (hasPendingDownload) {
+      try {
+        await triggerReportDownload();
+      } catch {
+        // silently fail — user can retry the download from the dashboard
+      }
+    }
+    navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-violet-600/10 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 relative">
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: 'linear-gradient(115deg, #0b1330 0%, #1e2a5e 22%, #4c2a7a 45%, #7a2f6b 62%, #9c2d4a 78%, #7a1f2e 100%)',
+        }}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -46,9 +83,18 @@ export default function Signup() {
             </div>
             <span className="font-bold text-white text-xl">DevInsight</span>
           </Link>
-          <h1 className="text-2xl font-bold text-white mb-1">Create account</h1>
-          <p className="text-slate-400 text-sm">Get started with DevInsight</p>
+          <h1 className="text-2xl font-bold text-white mb-1">Download your report</h1>
+          <p className="text-slate-400 text-sm">Create a free account to download your personalized PDF report.</p>
         </div>
+
+        <ul className="space-y-1.5 mb-6 px-1">
+          {benefits.map((b) => (
+            <li key={b} className="flex items-center gap-2 text-xs text-slate-500">
+              <Check size={12} className="text-emerald-500/70 flex-shrink-0" />
+              {b}
+            </li>
+          ))}
+        </ul>
 
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -112,7 +158,7 @@ export default function Signup() {
                   Creating account…
                 </>
               ) : (
-                'Create account'
+                'Create free account'
               )}
             </button>
           </form>

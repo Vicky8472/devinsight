@@ -71,8 +71,8 @@ export default function ResumeAnalyzer() {
     <AppShell>
       <div className={isIdle ? 'max-w-5xl mx-auto min-h-[calc(100vh-14rem)] flex flex-col justify-center pt-16' : 'max-w-5xl mx-auto'}>
         {/* Header */}
-        <div className={isIdle ? 'mb-10 text-center' : 'mb-8 text-center'}>
-          <div className={isIdle ? 'flex flex-col items-center gap-4 mb-2' : 'flex flex-col items-center gap-3 mb-2'}>
+        <div className={isIdle ? 'mb-6 text-center' : 'mb-8 text-center'}>
+          <div className={isIdle ? 'flex flex-col items-center gap-3 mb-2' : 'flex flex-col items-center gap-3 mb-2'}>
             <div className={isIdle ? 'w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center' : 'w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center'}>
               <FileText size={isIdle ? 26 : 20} className="text-blue-400" />
             </div>
@@ -84,7 +84,7 @@ export default function ResumeAnalyzer() {
         </div>
 
         {/* Upload */}
-        <div className="max-w-xl mb-8 mx-auto w-full">
+        <div className="max-w-2xl mb-8 mx-auto w-full">
           <UploadZone
             onFile={setFile}
             file={file}
