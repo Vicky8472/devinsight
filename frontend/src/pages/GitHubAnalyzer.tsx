@@ -1,10 +1,11 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, CheckCircle, AlertCircle, GitBranch, Users, BookOpen, Lightbulb, Star } from 'lucide-react';
 import AppShell from '../components/AppShell';
 import ScoreRing from '../components/ScoreRing';
 import { api } from '../services/api';
-import { saveGitHub } from '../utils/analysisStore';
+import { saveGitHub, loadGitHub } from '../utils/analysisStore';
 
 interface GitHubResult {
   overallScore: number;
@@ -48,9 +49,13 @@ function scoreColor(s: number) {
 }
 
 export default function GitHubAnalyzer() {
-  const [username, setUsername] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [result, setResult] = useState<GitHubResult | null>(null);
+  const [searchParams] = useSearchParams();
+  const forceReanalyze = searchParams.get('reanalyze') === '1';
+  const stored = !forceReanalyze ? loadGitHub() : null;
+
+  const [username, setUsername] = useState(stored?.username ?? '');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(stored ? 'success' : 'idle');
+  const [result, setResult] = useState<GitHubResult | null>(stored as GitHubResult | null);
   const [error, setError] = useState('');
   const [step, setStep] = useState(0);
 
@@ -102,8 +107,8 @@ export default function GitHubAnalyzer() {
 
         {/* Input */}
         <form onSubmit={handleSubmit} className={isIdle ? 'mb-3 flex justify-center' : 'mb-10 flex justify-center'}>
-          <div className={isIdle ? 'flex gap-3 max-w-2xl w-full' : 'flex gap-3 max-w-lg w-full'}>
-            <div className="relative flex-1">
+          <div className={isIdle ? 'flex flex-col sm:flex-row gap-3 max-w-2xl w-full' : 'flex flex-col sm:flex-row gap-3 max-w-lg w-full'}>
+            <div className="relative flex-1 min-w-0">
               <Search size={isIdle ? 19 : 15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
@@ -120,8 +125,8 @@ export default function GitHubAnalyzer() {
               type="submit"
               disabled={status === 'loading' || !username.trim()}
               className={isIdle
-                ? 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-7 py-[1.15rem] rounded-xl transition-colors text-[1.05rem] whitespace-nowrap'
-                : 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm whitespace-nowrap'}
+                ? 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-7 py-[1.15rem] rounded-xl transition-colors text-[1.05rem] whitespace-nowrap w-full sm:w-auto'
+                : 'bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm whitespace-nowrap w-full sm:w-auto'}
             >
               {status === 'loading' ? 'Analysing…' : 'Analyse Profile'}
             </button>
@@ -144,9 +149,9 @@ export default function GitHubAnalyzer() {
             exit={{ opacity: 0 }}
             className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 border-2 border-slate-700 border-t-violet-500 rounded-full animate-spin" />
-              <span className="text-white font-medium">Analysing @{username}</span>
+            <div className="flex items-center gap-3 mb-6 min-w-0">
+              <div className="w-8 h-8 border-2 border-slate-700 border-t-violet-500 rounded-full animate-spin flex-shrink-0" />
+              <span className="text-white font-medium truncate">Analysing @{username}</span>
             </div>
             <div className="space-y-3">
               {LOADING_STEPS.map((s, i) => (
@@ -195,18 +200,18 @@ export default function GitHubAnalyzer() {
             className="space-y-6"
           >
             {/* Profile header */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center gap-5">
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row items-center sm:items-center gap-5 text-center sm:text-left">
               {result.avatarUrl && (
                 <img
                   src={result.avatarUrl}
                   alt={result.name}
-                  className="w-16 h-16 rounded-full border-2 border-slate-700"
+                  className="w-16 h-16 rounded-full border-2 border-slate-700 flex-shrink-0"
                 />
               )}
-              <div className="flex-1 min-w-0">
-                <h2 className="text-xl font-bold text-white">{result.name}</h2>
-                <p className="text-slate-400 text-sm">@{result.username}</p>
-                {result.bio && <p className="text-slate-300 text-sm mt-1">{result.bio}</p>}
+              <div className="flex-1 min-w-0 w-full">
+                <h2 className="text-xl font-bold text-white truncate">{result.name}</h2>
+                <p className="text-slate-400 text-sm truncate">@{result.username}</p>
+                {result.bio && <p className="text-slate-300 text-sm mt-1 truncate">{result.bio}</p>}
               </div>
               <div className="flex gap-6 text-center flex-shrink-0">
                 <div>
@@ -222,7 +227,7 @@ export default function GitHubAnalyzer() {
 
             {/* Scores */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-6">
                 <h3 className="text-lg font-semibold text-white">Score Breakdown</h3>
                 <div className="text-right">
                   <span className="text-3xl font-black" style={{ color: scoreColor(result.overallScore) }}>

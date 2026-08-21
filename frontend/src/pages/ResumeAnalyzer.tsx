@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, CheckCircle, AlertCircle, Lightbulb, Star, ArrowRight } from 'lucide-react';
 import AppShell from '../components/AppShell';
 import ScoreRing from '../components/ScoreRing';
 import UploadZone from '../components/UploadZone';
 import { api } from '../services/api';
-import { saveResume } from '../utils/analysisStore';
+import { saveResume, loadResume } from '../utils/analysisStore';
 
 interface ResumeResult {
   overallScore: number;
@@ -36,9 +37,13 @@ function scoreColor(s: number) {
 }
 
 export default function ResumeAnalyzer() {
+  const [searchParams] = useSearchParams();
+  const forceReanalyze = searchParams.get('reanalyze') === '1';
+  const stored = !forceReanalyze ? loadResume() : null;
+
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [result, setResult] = useState<ResumeResult | null>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(stored ? 'success' : 'idle');
+  const [result, setResult] = useState<ResumeResult | null>(stored as ResumeResult | null);
   const [error, setError] = useState('');
   const [step, setStep] = useState(0);
 
@@ -113,9 +118,9 @@ export default function ResumeAnalyzer() {
             exit={{ opacity: 0 }}
             className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 border-2 border-slate-700 border-t-violet-500 rounded-full animate-spin" />
-              <span className="text-white font-medium">Analysing {file?.name}</span>
+            <div className="flex items-center gap-3 mb-6 min-w-0">
+              <div className="w-8 h-8 border-2 border-slate-700 border-t-violet-500 rounded-full animate-spin flex-shrink-0" />
+              <span className="text-white font-medium truncate">Analysing {file?.name}</span>
             </div>
             <div className="space-y-3">
               {LOADING_STEPS.map((s, i) => (
@@ -163,12 +168,12 @@ export default function ResumeAnalyzer() {
           >
             {/* Scores */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div>
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-6">
+                <div className="min-w-0 max-w-full">
                   <h3 className="text-lg font-semibold text-white">Score Breakdown</h3>
-                  <p className="text-slate-500 text-xs mt-0.5">{result.filename}</p>
+                  <p className="text-slate-500 text-xs mt-0.5 truncate">{result.filename}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex-shrink-0">
                   <span className="text-3xl font-black" style={{ color: scoreColor(result.overallScore) }}>
                     {result.overallScore}
                   </span>

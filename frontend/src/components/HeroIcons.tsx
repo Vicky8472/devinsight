@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Terminal } from 'lucide-react';
+import { Terminal, Code2, Braces } from 'lucide-react';
 
 function GitHubMark() {
   return (
@@ -62,6 +62,7 @@ interface Badge {
   size: number;
   tint: 'violet' | 'red';
   delay: number;
+  opacity?: number;
 }
 
 const badges: Badge[] = [
@@ -72,6 +73,8 @@ const badges: Badge[] = [
   { key: 'vscode', content: <VSCodeMark />, top: '80%', right: '10%', size: 60, tint: 'red', delay: 3 },
   { key: 'react', content: <ReactMark />, top: '86%', left: '5%', size: 56, tint: 'violet', delay: 1 },
   { key: 'python', content: <PythonMark />, top: '38%', right: '2%', size: 56, tint: 'red', delay: 2.5 },
+  { key: 'code', content: <Code2 className="w-1/2 h-1/2" />, top: '30%', left: '2%', size: 54, tint: 'violet', delay: 1.8, opacity: 0.07 },
+  { key: 'braces', content: <Braces className="w-1/2 h-1/2" />, top: '58%', left: '14%', size: 50, tint: 'violet', delay: 2.3, opacity: 0.06 },
 ];
 
 const tintStyles = {
@@ -87,7 +90,7 @@ export default function HeroIcons() {
         return (
           <motion.div
             key={b.key}
-            className="absolute rounded-2xl flex items-center justify-center backdrop-blur-sm opacity-40"
+            className="absolute rounded-2xl flex items-center justify-center backdrop-blur-sm"
             style={{
               top: b.top,
               left: b.left,
@@ -98,6 +101,7 @@ export default function HeroIcons() {
               border: `1px solid ${t.border}`,
               color: t.color,
               padding: b.size * 0.28,
+              opacity: b.opacity ?? 0.4,
             }}
             animate={{ y: [0, -12, 0] }}
             transition={{ duration: 5 + b.delay, delay: b.delay, repeat: Infinity, ease: 'easeInOut' }}

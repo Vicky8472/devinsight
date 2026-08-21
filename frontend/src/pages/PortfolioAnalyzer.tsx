@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, CheckCircle, AlertCircle, Lightbulb, ArrowRight, Link, Image, FileText, Tag } from 'lucide-react';
 import AppShell from '../components/AppShell';
 import ScoreRing from '../components/ScoreRing';
 import { api } from '../services/api';
-import { savePortfolio } from '../utils/analysisStore';
+import { savePortfolio, loadPortfolio } from '../utils/analysisStore';
 
 interface PortfolioMeta {
   title: string;
@@ -58,9 +59,13 @@ function MetaStat({ icon, label, value, warn }: { icon: React.ReactNode; label: 
 }
 
 export default function PortfolioAnalyzer() {
-  const [url, setUrl] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [result, setResult] = useState<PortfolioResult | null>(null);
+  const [searchParams] = useSearchParams();
+  const forceReanalyze = searchParams.get('reanalyze') === '1';
+  const stored = !forceReanalyze ? loadPortfolio() : null;
+
+  const [url, setUrl] = useState(stored?.url ?? '');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(stored ? 'success' : 'idle');
+  const [result, setResult] = useState<PortfolioResult | null>(stored as PortfolioResult | null);
   const [error, setError] = useState('');
   const [step, setStep] = useState(0);
 
@@ -112,8 +117,8 @@ export default function PortfolioAnalyzer() {
 
         {/* URL input */}
         <div className={isIdle ? 'max-w-2xl mb-8 mx-auto w-full' : 'max-w-xl mb-8 mx-auto w-full'}>
-          <div className="flex gap-3">
-            <div className="relative flex-1">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1 min-w-0">
               <Globe size={isIdle ? 19 : 16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               <input
                 type="url"
@@ -131,8 +136,8 @@ export default function PortfolioAnalyzer() {
               onClick={handleAnalyse}
               disabled={!url.trim() || status === 'loading'}
               className={isIdle
-                ? 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-7 py-[1.15rem] rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-[1.05rem] shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/40'
-                : 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap text-sm'}
+                ? 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-7 py-[1.15rem] rounded-xl transition-colors flex items-center justify-center gap-2 whitespace-nowrap text-[1.05rem] shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/40 w-full sm:w-auto'
+                : 'bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-xl transition-colors flex items-center justify-center gap-2 whitespace-nowrap text-sm w-full sm:w-auto'}
             >
               Analyse <ArrowRight size={isIdle ? 19 : 15} />
             </button>
@@ -150,8 +155,8 @@ export default function PortfolioAnalyzer() {
             exit={{ opacity: 0 }}
             className="bg-slate-900 border border-slate-800 rounded-2xl p-8 max-w-md mx-auto"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 border-2 border-slate-700 border-t-emerald-500 rounded-full animate-spin" />
+            <div className="flex items-center gap-3 mb-6 min-w-0">
+              <div className="w-8 h-8 border-2 border-slate-700 border-t-emerald-500 rounded-full animate-spin flex-shrink-0" />
               <span className="text-white font-medium truncate">{url}</span>
             </div>
             <div className="space-y-3">
@@ -200,19 +205,19 @@ export default function PortfolioAnalyzer() {
           >
             {/* Scores */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div>
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-6">
+                <div className="min-w-0 max-w-full">
                   <h3 className="text-lg font-semibold text-white">Score Breakdown</h3>
                   <a
                     href={result.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors truncate block max-w-xs"
+                    className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors truncate block max-w-full"
                   >
                     {result.url}
                   </a>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex-shrink-0">
                   <span className="text-3xl font-black" style={{ color: scoreColor(result.overallScore) }}>
                     {result.overallScore}
                   </span>

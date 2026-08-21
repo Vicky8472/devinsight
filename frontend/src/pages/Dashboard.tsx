@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  FileText, GitBranch, Globe, ArrowRight, CheckCircle, Clock,
+  FileText, GitBranch, Globe, ArrowRight, Clock,
   Lightbulb, TrendingUp, Target, Download,
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -184,7 +184,7 @@ export default function Dashboard() {
 
   return (
     <AppShell>
-      <div className="space-y-8">
+      <div className={hasAny ? 'space-y-8' : 'space-y-8 flex flex-col min-h-[calc(100vh-14rem)]'}>
         {/* Hero section — career score */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -249,11 +249,11 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Module cards */}
-        <div>
+        <div className={hasAny ? '' : 'flex-1 flex flex-col justify-center'}>
           <h3 className="text-sm font-medium text-slate-400 mb-3 flex items-center gap-2">
             <Target size={14} /> Analyzers
           </h3>
-          <div className="grid sm:grid-cols-3 gap-5">
+          <div className={hasAny ? 'grid sm:grid-cols-3 gap-5' : 'grid sm:grid-cols-3 gap-6'}>
             {MODULES.map((m, i) => {
               const stored = scores[m.key];
               const isDone = !!stored;
@@ -264,60 +264,72 @@ export default function Dashboard() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08 }}
-                  className="h-full"
+                  className={
+                    hasAny
+                      ? 'flex flex-col h-full min-h-[228px] bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl p-6 transition-colors group relative overflow-hidden'
+                      : 'flex flex-col h-full min-h-[300px] bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl p-8 transition-colors group relative overflow-hidden'
+                  }
                 >
-                  <Link
-                    to={m.to}
-                    className="flex flex-col h-full min-h-[228px] bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-2xl p-6 transition-colors group relative overflow-hidden"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className={`w-9 h-9 rounded-xl border ${m.bg} flex items-center justify-center`}>
-                        <m.icon size={17} className={m.color} />
-                      </div>
-                      {isDone ? (
-                        <span className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
-                          <CheckCircle size={11} /> Done
-                        </span>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={
+                      hasAny
+                        ? `w-9 h-9 rounded-xl border ${m.bg} flex items-center justify-center`
+                        : `w-12 h-12 rounded-xl border ${m.bg} flex items-center justify-center`
+                    }>
+                      <m.icon size={hasAny ? 17 : 22} className={m.color} />
+                    </div>
+                  </div>
+
+                  <h2 className={hasAny ? 'text-sm font-semibold text-white mb-1' : 'text-base font-semibold text-white mb-2'}>
+                    {m.title}
+                  </h2>
+                  <p className={hasAny ? 'text-slate-500 text-xs leading-relaxed mb-3' : 'text-slate-500 text-sm leading-relaxed mb-5'}>{m.description}</p>
+
+                  <div className="mt-auto">
+                    <div className={hasAny ? 'mb-3' : 'mb-4'}>
+                      {isDone && stored ? (
+                        <>
+                          <span className="text-2xl font-black" style={{ color: scoreColor(stored.overallScore) }}>
+                            {stored.overallScore}
+                            <span className="text-slate-600 text-sm font-normal">/100</span>
+                          </span>
+                          <span className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                            <Clock size={10} /> {timeAgo(stored.savedAt)}
+                          </span>
+                        </>
                       ) : (
-                        <span className="text-xs text-slate-600 bg-slate-800 rounded-full px-2.5 py-1">
-                          Not run
-                        </span>
+                        <span className="text-xs text-slate-600">Not started</span>
                       )}
                     </div>
 
-                    <h2 className="text-sm font-semibold text-white mb-1 group-hover:text-violet-300 transition-colors">
-                      {m.title}
-                    </h2>
-                    <p className="text-slate-500 text-xs leading-relaxed mb-3">{m.description}</p>
-
-                    <div className="mt-auto flex items-end justify-between gap-3">
-                      <div>
-                        {isDone && stored ? (
-                          <>
-                            <span className="text-2xl font-black" style={{ color: scoreColor(stored.overallScore) }}>
-                              {stored.overallScore}
-                              <span className="text-slate-600 text-sm font-normal">/100</span>
-                            </span>
-                            <span className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
-                              <Clock size={10} /> {timeAgo(stored.savedAt)}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-xs text-slate-600">Not started</span>
-                        )}
-                      </div>
-
-                      {isDone ? (
-                        <span className="flex items-center gap-1 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1.5 whitespace-nowrap group-hover:bg-emerald-500/20 transition-colors">
+                    {isDone ? (
+                      <div className="flex items-center gap-2">
+                        <Link
+                          to={m.to}
+                          className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 rounded-full px-3 py-1.5 whitespace-nowrap transition-colors"
+                        >
                           View Results <ArrowRight size={11} />
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-xs font-medium text-slate-300 bg-slate-800 border border-slate-700 rounded-full px-3 py-1.5 whitespace-nowrap group-hover:bg-violet-500/20 group-hover:border-violet-500/30 group-hover:text-violet-300 transition-colors">
-                          Run Analysis <ArrowRight size={11} />
-                        </span>
-                      )}
-                    </div>
-                  </Link>
+                        </Link>
+                        <Link
+                          to={`${m.to}?reanalyze=1`}
+                          className="flex-1 flex items-center justify-center gap-1 text-xs font-medium text-slate-300 bg-slate-800 border border-slate-700 hover:bg-violet-500/20 hover:border-violet-500/30 hover:text-violet-300 rounded-full px-3 py-1.5 whitespace-nowrap transition-colors"
+                        >
+                          Reanalyze
+                        </Link>
+                      </div>
+                    ) : (
+                      <Link
+                        to={m.to}
+                        className={
+                          hasAny
+                            ? 'flex items-center justify-center gap-1 text-xs font-medium text-slate-300 bg-slate-800 border border-slate-700 hover:bg-violet-500/20 hover:border-violet-500/30 hover:text-violet-300 rounded-full px-3 py-1.5 whitespace-nowrap transition-colors'
+                            : 'flex items-center justify-center gap-1.5 text-sm font-medium text-slate-300 bg-slate-800 border border-slate-700 hover:bg-violet-500/20 hover:border-violet-500/30 hover:text-violet-300 rounded-full px-4 py-2.5 whitespace-nowrap transition-colors'
+                        }
+                      >
+                        Run Analysis <ArrowRight size={hasAny ? 11 : 13} />
+                      </Link>
+                    )}
+                  </div>
                 </motion.div>
               );
             })}

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import HeroIcons from '../components/HeroIcons';
+import Logo from '../components/Logo';
 
 function ScoreRing({ score, color, label }: { score: number; color: string; label: string }) {
   const size = 80;
@@ -125,7 +126,7 @@ export default function Landing() {
 
               <motion.h1
                 variants={fadeUp} initial="hidden" animate="visible" custom={1}
-                className="text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white mb-6"
+                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white mb-6"
               >
                 Elevate Your{' '}
                 <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
@@ -314,9 +315,7 @@ export default function Landing() {
       <footer className="border-t border-slate-800 py-8 px-6">
         <div className="max-w-6xl xl:max-w-[1800px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-violet-600 flex items-center justify-center">
-              <Zap size={12} className="text-white" />
-            </div>
+            <Logo size={24} iconSize={12} rounded="rounded" />
             <span className="text-sm text-slate-400 font-semibold">DevInsight</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-slate-600">

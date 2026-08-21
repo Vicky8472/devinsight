@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle, Check } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { loadGitHub, loadResume, loadPortfolio } from '../utils/analysisStore';
+import Logo from '../components/Logo';
 
 const PENDING_DOWNLOAD_KEY = 'ds_pending_download';
 
@@ -78,9 +79,7 @@ export default function Signup() {
       >
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-9 h-9 rounded-xl bg-violet-600 flex items-center justify-center">
-              <Zap size={18} className="text-white" />
-            </div>
+            <Logo size={36} iconSize={18} rounded="rounded-xl" />
             <span className="font-bold text-white text-xl">DevInsight</span>
           </Link>
           <h1 className="text-2xl font-bold text-white mb-1">Download your report</h1>

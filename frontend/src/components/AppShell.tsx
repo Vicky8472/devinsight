@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Zap, LogOut, LayoutDashboard } from 'lucide-react';
+import { LogOut, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import Logo from './Logo';
 
 interface Props {
   children: React.ReactNode;
@@ -41,9 +42,7 @@ export default function AppShell({ children }: Props) {
         <div className="max-w-[1800px] mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
-                <Zap size={14} className="text-white" />
-              </div>
+              <Logo size={28} iconSize={14} />
               <span className="font-bold text-white text-base">DevInsight</span>
             </Link>
             {!onDashboard && (
