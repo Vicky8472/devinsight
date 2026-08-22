@@ -37,17 +37,17 @@ export interface StoredPortfolio {
 const KEYS = { github: 'ds_github', resume: 'ds_resume', portfolio: 'ds_portfolio' };
 
 function load<T>(key: string): T | null {
-  try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch { return null; }
+  try { return JSON.parse(sessionStorage.getItem(key) || 'null'); } catch { return null; }
 }
 
 export const saveGitHub = (d: Omit<StoredGitHub, 'savedAt'>) =>
-  localStorage.setItem(KEYS.github, JSON.stringify({ ...d, savedAt: Date.now() }));
+  sessionStorage.setItem(KEYS.github, JSON.stringify({ ...d, savedAt: Date.now() }));
 
 export const saveResume = (d: Omit<StoredResume, 'savedAt'>) =>
-  localStorage.setItem(KEYS.resume, JSON.stringify({ ...d, savedAt: Date.now() }));
+  sessionStorage.setItem(KEYS.resume, JSON.stringify({ ...d, savedAt: Date.now() }));
 
 export const savePortfolio = (d: Omit<StoredPortfolio, 'savedAt'>) =>
-  localStorage.setItem(KEYS.portfolio, JSON.stringify({ ...d, savedAt: Date.now() }));
+  sessionStorage.setItem(KEYS.portfolio, JSON.stringify({ ...d, savedAt: Date.now() }));
 
 export const loadGitHub = () => load<StoredGitHub>(KEYS.github);
 export const loadResume = () => load<StoredResume>(KEYS.resume);
